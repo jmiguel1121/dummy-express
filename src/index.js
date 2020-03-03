@@ -1,19 +1,21 @@
-var http =require('http');
-var fs= require('fs');
-var log= require('./modules/mylog');
-var {countries}= require('countries-list');
-var url = require("url");
-var querystring = require("querystring");
+const express= require('express');
+const app = express();
+const {countries}= require('countries-list');
 
-var server= http.createServer((request,response)=>{
-    var parse = url.parse(request.url)
-var query = querystring.parse(parse.query);
-    if (parse.pathname ==='/countries') {
-        response.writeHead(200,{'Content-type':'application/json'});
-        response.write(JSON.stringify(countries[query.code]));
-        response.end();
-    }
+
+app.get('/',(request,response)=>{
+    response.status(200).send("si ingresa");
 });
 
-server.listen(4000);
-console.log('runing port 4000');
+app.get('/country',(request,response)=>{
+    response.json(countries.AD);
+});
+
+app.get('*',(request,response)=>{
+    response.status(404).send("not found");
+});
+
+
+app.listen(4000,()=>{
+    console.log('runing port 4000');
+})
